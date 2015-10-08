@@ -1,9 +1,25 @@
 def first_anagram?(word1, word2)
-  word1_grams = word1.split("").permutation.to_a.map(&:join)
+  word1_letters = word1.split("")
+  word1_grams = permutations(word1_letters).map(&:join)
 
   word1_grams.include?(word2)
 end
 #
+def permutations(array)
+  return array if array.length <= 1
+  return [array, array.reverse] if array.length == 2
+
+  permutations_list = []
+
+  array.each_index do |i|
+    subarray = array[0...i] + array[i + 1...array.length]
+    permutations(subarray).each do |permutation|
+      permutations_list << [array[i]] + permutation
+    end
+  end
+
+  permutations_list
+end
 
 # p first_anagram?("gizmo", "sally")    #=> false
 # p first_anagram?("elvis", "lives")    #=> true
@@ -26,7 +42,46 @@ def second_anagram?(word1, word2)
   word1_letters.empty? && word2_letters.empty?
 end
 
+#
+# p second_anagram?("gizmo", "sally")    #=> false
+# p second_anagram?("elvis", "lives")    #=> true
+# p second_anagram?("elvis", "livesll")    #=> false
 
-p second_anagram?("gizmo", "sally")    #=> false
-p second_anagram?("elvis", "lives")    #=> true
-p second_anagram?("elvis", "livesll")    #=> false
+def third_anagram?(word1, word2)
+  word1_letters = word1.split("")
+  word1_letters.sort!
+
+  word2_letters = word2.split("")
+  word2_letters.sort!
+
+  word1_letters == word2_letters
+end
+
+# p third_anagram?("gizmo", "sally")    #=> false
+# p third_anagram?("elvis", "lives")    #=> true
+
+def fourth_anagram?(word1, word2)
+  word1_hash = Hash.new(0)
+  word2_hash = Hash.new(0)
+
+  word1.each_char { |letter| word1_hash[letter] += 1 }
+  word2.each_char { |letter| word2_hash[letter] += 1 }
+
+  word1_hash == word2_hash
+end
+
+# p fourth_anagram?("gizmo", "sally")    #=> false
+# p fourth_anagram?("elvis", "lives")    #=> true
+
+def bonus_anagram?(word1, word2)
+  letter_hash = Hash.new(0)
+
+  word1.each_char { |letter| letter_hash[letter] += 1 if word2.include?(letter) }
+
+  letter_hash.values.inject(:+) == word1.length &&
+  word1.length == word2.length
+end
+
+p bonus_anagram?("gizmo", "sally")    #=> false
+p bonus_anagram?("elvis", "lives")    #=> true
+p bonus_anagram?("hell", "heoo")    #=> false
