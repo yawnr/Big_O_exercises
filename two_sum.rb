@@ -56,6 +56,8 @@ def good_two_sum?(array, target)
   false
 end
 
-array = [0, 1, 5, 7]
-p good_two_sum?(array, 6) # => should be true
-p good_two_sum?(array, 10) # => should be false
+## O(n) complexity
+
+# array = [0, 1, 5, 7]
+# p good_two_sum?(array, 6) # => should be true
+# p good_two_sum?(array, 10) # => should be false
