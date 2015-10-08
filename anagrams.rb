@@ -4,7 +4,9 @@ def first_anagram?(word1, word2)
 
   word1_grams.include?(word2)
 end
-#
+## O(n!)
+
+
 def permutations(array)
   return array if array.length <= 1
   return [array, array.reverse] if array.length == 2
@@ -42,6 +44,8 @@ def second_anagram?(word1, word2)
   word1_letters.empty? && word2_letters.empty?
 end
 
+## O(n ** 2)
+
 #
 # p second_anagram?("gizmo", "sally")    #=> false
 # p second_anagram?("elvis", "lives")    #=> true
@@ -56,9 +60,13 @@ def third_anagram?(word1, word2)
 
   word1_letters == word2_letters
 end
+## O(n * log(n))
 
 # p third_anagram?("gizmo", "sally")    #=> false
 # p third_anagram?("elvis", "lives")    #=> true
+
+
+
 
 def fourth_anagram?(word1, word2)
   word1_hash = Hash.new(0)
@@ -70,17 +78,21 @@ def fourth_anagram?(word1, word2)
   word1_hash == word2_hash
 end
 
+## O(n)
+
 # p fourth_anagram?("gizmo", "sally")    #=> false
 # p fourth_anagram?("elvis", "lives")    #=> true
 
 def bonus_anagram?(word1, word2)
   letter_hash = Hash.new(0)
 
-  word1.each_char { |letter| letter_hash[letter] += 1 if word2.include?(letter) }
+  word1.each_char { |letter| letter_hash[letter] += 1 }
+  word2.each_char { |letter| letter_hash[letter] -= 1 }
 
-  letter_hash.values.inject(:+) == word1.length &&
-  word1.length == word2.length
+  letter_hash.all? { |letter, value| value == 0 }
 end
+
+## O(n)
 
 p bonus_anagram?("gizmo", "sally")    #=> false
 p bonus_anagram?("elvis", "lives")    #=> true
